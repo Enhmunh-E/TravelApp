@@ -1,8 +1,3 @@
-import {NavigationContainer} from '@react-navigation/native';
-import {
-  NativeStackHeaderProps,
-  NativeStackScreenProps,
-} from '@react-navigation/native-stack';
 import React from 'react';
 import {
   StyleSheet,
@@ -26,7 +21,6 @@ export const Welcome = ({navigation}: Props) => {
       resizeMode="cover"
       style={styles.bgImage}>
       <SafeAreaView style={styles.bgImage}>
-        <LetsGo isdark={true} />
         <Text style={styles.hello}>Hello,</Text>
         <Text style={styles.leonard}>Leonard!</Text>
         <Pressable
@@ -41,6 +35,7 @@ export const Welcome = ({navigation}: Props) => {
 const styles = StyleSheet.create({
   bgImage: {
     flex: 1,
+    paddingTop: 40,
   },
   explore: {
     width: 339,
