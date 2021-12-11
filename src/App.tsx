@@ -7,50 +7,60 @@ import {RootStackParamList} from './screens/types';
 import Welcome from './screens/Welcome';
 import Welcome2 from './screens/Welcome2';
 import SearchIcon from './assets/search-2-line.svg';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import Colors from './styles/colors';
+import Home from './screens/Home';
+import HomeHeader from './components/HomeHeader';
+import {Provider} from './provider/provider';
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Welcome"
-          component={Welcome}
-          options={{
-            headerTitle: () => <LetsGo isdark={true} />,
-            headerStyle: {
-              backgroundColor: 'transparent',
-            },
-            headerTransparent: true,
-            headerShadowVisible: false,
-          }}
-        />
-        <Stack.Screen
-          name="Welcome2"
-          component={Welcome2}
-          options={{
-            headerTitle: () => <LetsGo isdark={false} />,
-            headerRight: () => (
-              <View
-                style={{
-                  height: 40,
-                  width: 40,
-                  backgroundColor: Colors.primary,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: 20,
-                  marginTop: 35,
-                }}>
-                <SearchIcon />
-              </View>
-            ),
-            headerTransparent: true,
-            headerShadowVisible: false,
-            headerBackVisible: false,
-          }}
-        />
-      </Stack.Navigator>
+      <Provider>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Welcome"
+            component={Welcome}
+            options={{
+              headerTitle: () => <LetsGo isdark={true} />,
+              headerStyle: {
+                backgroundColor: 'transparent',
+              },
+              headerTransparent: true,
+              headerShadowVisible: false,
+            }}
+          />
+          <Stack.Screen
+            name="Welcome2"
+            component={Welcome2}
+            options={{
+              headerTitle: () => <LetsGo isdark={false} />,
+              headerRight: () => (
+                <View
+                  style={{
+                    height: 40,
+                    width: 40,
+                    backgroundColor: Colors.primary,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: 20,
+                  }}>
+                  <SearchIcon />
+                </View>
+              ),
+              headerTransparent: true,
+              headerShadowVisible: false,
+              headerBackVisible: false,
+            }}
+          />
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{
+              header: () => <HomeHeader />,
+            }}
+          />
+        </Stack.Navigator>
+      </Provider>
     </NavigationContainer>
   );
 };

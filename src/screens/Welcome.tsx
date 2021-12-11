@@ -1,3 +1,4 @@
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
 import {
   StyleSheet,
@@ -13,29 +14,27 @@ import Colors from '../styles/colors';
 import {RootStackParamList} from './types';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-type Props = NativeStackScreenProps<RootStackParamList, 'Welcome2'>;
+type Props = NativeStackScreenProps<RootStackParamList, 'Welcome'>;
 export const Welcome = ({navigation}: Props) => {
   return (
     <ImageBackground
       source={require('../assets/homeImage.png')}
       resizeMode="cover"
       style={styles.bgImage}>
-      <SafeAreaView style={styles.bgImage}>
-        <Text style={styles.hello}>Hello,</Text>
-        <Text style={styles.leonard}>Leonard!</Text>
-        <Pressable
-          style={styles.explore}
-          onPress={() => navigation.navigate('Welcome2')}>
-          <Explore />
-        </Pressable>
-      </SafeAreaView>
+      <Text style={styles.hello}>Hello,</Text>
+      <Text style={styles.leonard}>Leonard!</Text>
+      <Pressable
+        style={styles.explore}
+        onPress={() => navigation.navigate('Welcome2')}>
+        <Explore />
+      </Pressable>
     </ImageBackground>
   );
 };
 const styles = StyleSheet.create({
   bgImage: {
     flex: 1,
-    paddingTop: 40,
+    paddingTop: 100,
   },
   explore: {
     width: 339,

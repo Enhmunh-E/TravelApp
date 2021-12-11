@@ -1,24 +1,24 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useContext, useState} from 'react';
 import {
   FlatList,
   Image,
   ImageBackground,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
   Pressable,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import Colors from '../styles/colors';
-import styled from 'styled-components';
-const Explore = styled.Pressable`
-  width: 321px;
-  height: 64px;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(5px);
-  border-radius: 5px;
-`;
-export const Welcome2 = () => {
+import {BlurView} from '@react-native-community/blur';
+import {NavigationContainer} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootStackParamList} from './types';
+import {Context} from '../provider/provider';
+type Props = NativeStackScreenProps<RootStackParamList, 'Welcome2'>;
+export const Welcome2 = ({navigation}: Props) => {
+  const {setHeaderText} = useContext(Context);
   const [imageIndex, setImageIndex] = useState(0);
   const data = [
     {
@@ -48,50 +48,59 @@ export const Welcome2 = () => {
     [],
   );
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <ImageBackground
-        blurRadius={1}
-        source={data[imageIndex].image}
-        style={styles.bgImage}>
-        <Text style={styles.title}>Choose Your City</Text>
-        <View style={styles.center}>
-          <View style={[styles.centerRectangle, styles.center]}>
-            <FlatList
-              data={data}
-              keyExtractor={item => item.name}
-              pagingEnabled={true}
-              horizontal={true}
-              onScroll={onScroll}
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-              renderItem={({item}) => (
-                <View style={{display: 'flex', flexDirection: 'column'}}>
-                  <Image source={item.image} style={styles.listImage} />
-                  <Text style={styles.cityName}>{item.name}</Text>
-                </View>
-              )}
-            />
-          </View>
-          <View style={styles.centerBottom}>
-            {data.map((dt, index) => (
-              <View
-                key={index}
-                style={[
-                  styles.indicator,
-                  {
-                    width: index == imageIndex ? 25 : 6,
-                    opacity: 1 - index / 10,
-                  },
-                ]}
-              />
-            ))}
-          </View>
+    <ImageBackground
+      blurRadius={1}
+      source={data[imageIndex].image}
+      style={styles.bgImage}>
+      <Text style={styles.title}>Choose Your City</Text>
+      <View style={styles.center}>
+        <View style={[styles.centerRectangle, styles.center]}>
+          <FlatList
+            data={data}
+            keyExtractor={item => item.name}
+            pagingEnabled={true}
+            horizontal={true}
+            onScroll={onScroll}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            renderItem={({item}) => (
+              <View style={{display: 'flex', flexDirection: 'column'}}>
+                <Image
+                  source={item.image}
+                  style={styles.listImage}
+                  // resizeMode="c"
+                  resizeMethod="scale"
+                />
+                <Text style={styles.cityName}>{item.name}</Text>
+              </View>
+            )}
+          />
         </View>
-        <Explore>
-          <Text>EXPLORE THE CITY</Text>
-        </Explore>
-      </ImageBackground>
-    </SafeAreaView>
+        <View style={styles.centerBottom}>
+          {data.map((dt, index) => (
+            <View
+              key={index}
+              style={[
+                styles.indicator,
+                {
+                  width: index == imageIndex ? 25 : 6,
+                  opacity: 1 - index / 10,
+                },
+              ]}
+            />
+          ))}
+        </View>
+      </View>
+      <Pressable
+        onPress={() => {
+          setHeaderText(data[imageIndex].name);
+          navigation.navigate('Home');
+        }}>
+        <BlurView blurType="light" blurAmount={4} style={styles.explore}>
+          <Text style={styles.exploreText}>EXPLORE THE CITY</Text>
+        </BlurView>
+      </Pressable>
+    </ImageBackground>
   );
 };
 const styles = StyleSheet.create({
@@ -138,7 +147,7 @@ const styles = StyleSheet.create({
     borderRadius: 3,
   },
   cityName: {
-    fontFamily: 'NoirStd-Regular',
+    // fontFamily: 'NoirStd-Regular',
     textTransform: 'uppercase',
     color: Colors.secondary,
     fontSize: 24,
@@ -149,19 +158,25 @@ const styles = StyleSheet.create({
   explore: {
     width: 320,
     height: 64,
-    backgroundColor: 'white',
     borderRadius: 5,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
   },
   title: {
+    fontFamily: 'Times New Roman',
     width: 320,
     fontStyle: 'normal',
     fontWeight: 'normal',
     fontSize: 45,
     lineHeight: 53,
     color: Colors.secondary,
+  },
+  exploreText: {
+    color: Colors.primary,
+    fontSize: 16,
+    lineHeight: 27,
+    letterSpacing: 0.1,
   },
 });
 export default Welcome2;
