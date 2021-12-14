@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import Colors from '../styles/colors';
 import {BlurView} from '@react-native-community/blur';
-import {NavigationContainer} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from './types';
 import {Context} from '../provider/provider';
@@ -84,7 +83,7 @@ export const Welcome2 = ({navigation}: Props) => {
                 styles.indicator,
                 {
                   width: index == imageIndex ? 25 : 6,
-                  opacity: 1 - index / 10,
+                  opacity: 1 - (1 / data.length) * Math.abs(imageIndex - index),
                 },
               ]}
             />

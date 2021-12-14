@@ -1,11 +1,13 @@
+import {gql, useQuery} from '@apollo/client';
 import React, {useContext} from 'react';
 import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 import SearchIcon from '../assets/search-2-line.svg';
 import {Context} from '../provider/provider';
 import Colors from '../styles/colors';
+
 export const HomeHeader = () => {
-  const {headerText, headerSelected, setHeaderSelected} = useContext(Context);
-  const data = ['All', 'Museums', 'Historical Places', 'Restaurant'];
+  const {headerText, headerSelected, setHeaderSelected, categoriesData} =
+    useContext(Context);
   return (
     <View style={styles.headerContainer}>
       <View style={styles.row}>
@@ -18,25 +20,25 @@ export const HomeHeader = () => {
         </View>
       </View>
       <FlatList
-        data={data}
-        keyExtractor={item => item}
+        data={categoriesData}
+        keyExtractor={item => item.name}
         pagingEnabled={true}
         horizontal={true}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         renderItem={({item}) => (
           <Pressable
-            onPress={() => setHeaderSelected(item)}
+            onPress={() => setHeaderSelected(item.name)}
             style={[
               styles.headerItem,
-              headerSelected == item && styles.selectedHeader,
+              headerSelected == item.name && styles.selectedHeader,
             ]}>
             <Text
               style={[
                 styles.headerItemText,
-                headerSelected == item && styles.selectedHeaderText,
+                headerSelected == item.name && styles.selectedHeaderText,
               ]}>
-              {item}
+              {item.name}
             </Text>
           </Pressable>
         )}
@@ -47,7 +49,7 @@ export const HomeHeader = () => {
 const styles = StyleSheet.create({
   headerContainer: {
     height: 150,
-    display: 'flex',
+    // display: 'flex',
     flexDirection: 'column',
     // justifyContent: 'space-between',
     marginLeft: 24,
