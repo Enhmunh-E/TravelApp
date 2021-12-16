@@ -3,7 +3,9 @@ import {
   FlatList,
   Image,
   ImageBackground,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   NativeScrollEvent,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   NativeSyntheticEvent,
   Pressable,
   StyleSheet,
@@ -11,10 +13,12 @@ import {
   View,
 } from 'react-native';
 import Colors from '../styles/colors';
-import {BlurView} from '@react-native-community/blur';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParamList} from './types';
+// import {BlurView} from '@react-native-community/blur';
 import {Context} from '../provider/provider';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import {RootStackParamList} from './types';
 type Props = NativeStackScreenProps<RootStackParamList, 'Welcome2'>;
 export const Welcome2 = ({navigation}: Props) => {
   const {setHeaderText} = useContext(Context);
@@ -63,7 +67,7 @@ export const Welcome2 = ({navigation}: Props) => {
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             renderItem={({item}) => (
-              <View style={{display: 'flex', flexDirection: 'column'}}>
+              <View style={styles.col}>
                 <Image
                   source={item.image}
                   style={styles.listImage}
@@ -81,8 +85,9 @@ export const Welcome2 = ({navigation}: Props) => {
               key={index}
               style={[
                 styles.indicator,
+                // eslint-disable-next-line react-native/no-inline-styles
                 {
-                  width: index == imageIndex ? 25 : 6,
+                  width: index === imageIndex ? 25 : 6,
                   opacity: 1 - (1 / data.length) * Math.abs(imageIndex - index),
                 },
               ]}
@@ -95,9 +100,8 @@ export const Welcome2 = ({navigation}: Props) => {
           setHeaderText(data[imageIndex].name);
           navigation.navigate('Home');
         }}>
-        <BlurView blurType="light" blurAmount={4} style={styles.explore}>
-          <Text style={styles.exploreText}>EXPLORE THE CITY</Text>
-        </BlurView>
+        {/* <BlurView blurType="light" blurAmount={100} style={styles.explore} /> */}
+        <Text style={styles.exploreText}>EXPLORE THE CITY</Text>
       </Pressable>
     </ImageBackground>
   );
@@ -158,6 +162,7 @@ const styles = StyleSheet.create({
     width: 320,
     height: 64,
     borderRadius: 5,
+    position: 'absolute',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -176,6 +181,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 27,
     letterSpacing: 0.1,
+  },
+  col: {
+    flexDirection: 'column',
   },
 });
 export default Welcome2;

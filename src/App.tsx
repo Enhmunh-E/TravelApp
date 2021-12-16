@@ -1,8 +1,9 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import {Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import LetsGo from './components/LetsGo';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {RootStackParamList} from './screens/types';
 import Welcome from './screens/Welcome';
 import Welcome2 from './screens/Welcome2';
@@ -32,56 +33,64 @@ const client = new ApolloClient({
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const App = () => {
   return (
-    <ApolloProvider client={client}>
-      <NavigationContainer>
-        <Provider>
-          <Stack.Navigator>
-            <Stack.Screen
-              name="Welcome"
-              component={Welcome}
-              options={{
-                headerTitle: () => <LetsGo isdark={true} />,
-                headerStyle: {
-                  backgroundColor: 'transparent',
-                },
-                headerTransparent: true,
-                headerShadowVisible: false,
-              }}
-            />
-            <Stack.Screen
-              name="Welcome2"
-              component={Welcome2}
-              options={{
-                headerTitle: () => <LetsGo isdark={false} />,
-                headerRight: () => (
-                  <View
-                    style={{
-                      height: 40,
-                      width: 40,
-                      backgroundColor: Colors.primary,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderRadius: 20,
-                    }}>
-                    <SearchIcon />
-                  </View>
-                ),
-                headerTransparent: true,
-                headerShadowVisible: false,
-                headerBackVisible: false,
-              }}
-            />
-            <Stack.Screen
-              name="Home"
-              component={Home}
-              options={{
-                header: () => <HomeHeader />,
-              }}
-            />
-          </Stack.Navigator>
-        </Provider>
-      </NavigationContainer>
-    </ApolloProvider>
+    <View style={styles.container}>
+      <ApolloProvider client={client}>
+        <NavigationContainer>
+          <Provider>
+            <Stack.Navigator>
+              <Stack.Screen
+                name="Welcome"
+                component={Welcome}
+                options={{
+                  headerTitle: () => <LetsGo isdark={true} />,
+                  headerStyle: {
+                    backgroundColor: 'transparent',
+                  },
+                  headerTransparent: true,
+                  headerShadowVisible: false,
+                }}
+              />
+              <Stack.Screen
+                name="Welcome2"
+                component={Welcome2}
+                options={{
+                  headerTitle: () => <LetsGo isdark={false} />,
+                  headerRight: () => (
+                    <View style={styles.headerRightStyle}>
+                      <SearchIcon />
+                    </View>
+                  ),
+                  headerTransparent: true,
+                  headerShadowVisible: false,
+                  headerBackVisible: false,
+                }}
+              />
+              <Stack.Screen
+                name="Home"
+                component={Home}
+                options={{
+                  header: () => <HomeHeader />,
+                }}
+              />
+            </Stack.Navigator>
+          </Provider>
+        </NavigationContainer>
+      </ApolloProvider>
+    </View>
   );
 };
+const styles = StyleSheet.create({
+  headerRightStyle: {
+    height: 40,
+    width: 40,
+    backgroundColor: Colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 20,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: Colors.primary,
+  },
+});
 export default App;

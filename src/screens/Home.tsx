@@ -1,7 +1,6 @@
-import {gql, useLazyQuery, useQuery} from '@apollo/client';
-import React, {useContext, useEffect, useMemo} from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {gql, useQuery} from '@apollo/client';
+import React, {useContext} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
 import Footer from '../components/Footer';
 import HomeCarousel from '../components/HomeCarousel';
 import {ACTIVITY_PLACE_FIELDS} from '../fragments';
@@ -36,16 +35,7 @@ const ACTIVITY = gql`
     }
   }
 `;
-const FILTERED_ACTIVITY = gql`
-  ${ACTIVITY_PLACE_FIELDS}
-  query FilteredAcivity($categoryName: String) {
-    activityCollection(where: {category: {name: $categoryName}}) {
-      items {
-        ...ActivityPlaceFields
-      }
-    }
-  }
-`;
+
 export const Home = () => {
   const {data, loading} = useQuery<ActivitiesType>(ACTIVITY);
   const {headerSelected, filteredData} = useContext(Context);
@@ -54,7 +44,7 @@ export const Home = () => {
       <Text style={styles.topActivities}>Top Activities</Text>
       <HomeCarousel
         data={
-          headerSelected == 'All'
+          headerSelected === 'All'
             ? data?.activityCollection.items
               ? data.activityCollection.items
               : []
@@ -73,7 +63,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.primary,
-    paddingHorizontal: 24,
+    paddingHorizontal: 16,
   },
   topActivities: {
     fontSize: 19,

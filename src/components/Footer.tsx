@@ -3,16 +3,20 @@ import {
   Animated,
   Pressable,
   StyleSheet,
-  useWindowDimensions,
   View,
   Text,
+  Image,
+  Dimensions,
 } from 'react-native';
 import Colors from '../styles/colors';
 import Hamburger from '../assets/hamburger.svg';
 import Close from '../assets/close.svg';
 import Pin from '../assets/pin.svg';
+import Discover from '../assets/discover.svg';
+import Dos from '../assets/dos.svg';
+import Dones from '../assets/dones.svg';
+const width = Dimensions.get('window').width;
 export const Footer = () => {
-  const {width} = useWindowDimensions();
   const toBigAnimation = useRef(new Animated.Value(0)).current;
   const widthValue = toBigAnimation.interpolate({
     inputRange: [0, 1],
@@ -48,6 +52,7 @@ export const Footer = () => {
       style={[
         styles.circleButton,
         styles.center,
+        // eslint-disable-next-line react-native/no-inline-styles
         {
           width: widthValue,
           height: heightValue,
@@ -57,6 +62,7 @@ export const Footer = () => {
       <Pressable
         onPress={AnimationStarter}
         style={[
+          // eslint-disable-next-line react-native/no-inline-styles
           {flex: 1, position: 'absolute', display: opened ? 'none' : 'flex'},
           styles.center,
         ]}>
@@ -66,45 +72,49 @@ export const Footer = () => {
       </Pressable>
       <Animated.View
         style={[
+          // eslint-disable-next-line react-native/no-inline-styles
           {
             height: 160,
             width: width - 32,
             borderRadius: 36,
             display: opened ? 'flex' : 'none',
-            // backgroundColor: 'red',
           },
         ]}>
-        <View
-          style={{
-            height: 100,
-            borderBottomColor: '#2E2E2E',
-            borderBottomWidth: 1,
-          }}></View>
-        <View style={{height: 60, flexDirection: 'row'}}>
+        <View style={styles.top}>
+          <View style={[styles.col, styles.topItemContainer, styles.center]}>
+            <Discover />
+            <Text style={styles.topItemText}>DISCOVER</Text>
+          </View>
+          <View style={[styles.col, styles.topItemContainer, styles.center]}>
+            <Dos />
+            <Text style={styles.topItemText}>Do's</Text>
+          </View>
+          <View style={[styles.col, styles.topItemContainer, styles.center]}>
+            <Dones />
+            <Text style={styles.topItemText}>Done's</Text>
+          </View>
           <View
             style={[
-              {
-                width: width - 96,
-                borderRightColor: '#2E2E2E',
-                borderRightWidth: 1,
-                flexDirection: 'row',
-              },
+              styles.col,
+              styles.topItemContainer,
               styles.center,
+              {backgroundColor: '#232323'},
             ]}>
+            <Image
+              source={require('../assets/profile.jpg')}
+              style={styles.profileImage}
+            />
+            <Text style={styles.topItemText}>Profile</Text>
+          </View>
+        </View>
+        <View style={styles.bottom}>
+          <View style={[styles.pinContainer, styles.center]}>
             <Pin />
-            <Text
-              style={{
-                color: Colors.primary,
-                textTransform: 'uppercase',
-                fontWeight: '600',
-                paddingLeft: 14,
-              }}>
-              Change Cıty
-            </Text>
+            <Text style={styles.pinText}>Change Cıty</Text>
           </View>
           <Pressable
             onPress={AnimationStarter}
-            style={[styles.center, {flex: 1}]}>
+            style={[styles.center, styles.grow]}>
             <Close />
           </Pressable>
         </View>
@@ -126,6 +136,57 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  bigTop: {},
+  topItemText: {
+    color: Colors.primary,
+    textTransform: 'uppercase',
+    fontWeight: '400',
+    fontSize: 10,
+    lineHeight: 18,
+    paddingTop: 8,
+  },
+  topItemContainer: {
+    width: 72,
+    height: 80,
+    // flexDirection: 'column',
+    // justifyContent: 'space-between',
+    borderRadius: 23,
+  },
+  col: {
+    flexDirection: 'column',
+  },
+  top: {
+    height: 100,
+    borderBottomColor: '#2E2E2E',
+    borderBottomWidth: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+  },
+  profileImage: {
+    width: 25,
+    height: 25,
+    borderRadius: 12.5,
+    borderWidth: 1.5,
+    borderColor: Colors.primary,
+  },
+  bottom: {
+    height: 60,
+    flexDirection: 'row',
+  },
+  pinContainer: {
+    width: width - 96,
+    borderRightColor: '#2E2E2E',
+    borderRightWidth: 1,
+    flexDirection: 'row',
+  },
+  pinText: {
+    color: Colors.primary,
+    textTransform: 'uppercase',
+    fontWeight: '600',
+    paddingLeft: 14,
+  },
+  grow: {
+    flex: 1,
+  },
 });
 export default Footer;

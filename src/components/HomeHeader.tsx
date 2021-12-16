@@ -1,4 +1,3 @@
-import {gql, useQuery} from '@apollo/client';
 import React, {useContext} from 'react';
 import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 import SearchIcon from '../assets/search-2-line.svg';
@@ -13,6 +12,7 @@ export const HomeHeader = () => {
     categoriesData,
     loadFilteredActivity,
   } = useContext(Context);
+  console.log(categoriesData);
   return (
     <View style={styles.headerContainer}>
       <View style={styles.row}>
@@ -41,12 +41,12 @@ export const HomeHeader = () => {
             }}
             style={[
               styles.headerItem,
-              headerSelected == item.name && styles.selectedHeader,
+              headerSelected === item.name && styles.selectedHeader,
             ]}>
             <Text
               style={[
                 styles.headerItemText,
-                headerSelected == item.name && styles.selectedHeaderText,
+                headerSelected === item.name && styles.selectedHeaderText,
               ]}>
               {item.name}
             </Text>
@@ -59,10 +59,8 @@ export const HomeHeader = () => {
 const styles = StyleSheet.create({
   headerContainer: {
     height: 135,
-    // display: 'flex',
     flexDirection: 'column',
-    // justifyContent: 'space-between',
-    marginLeft: 24,
+    marginLeft: 16,
     marginTop: 45,
   },
   headerText: {
@@ -81,7 +79,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 24,
+    marginRight: 16,
   },
   headerItem: {
     display: 'flex',
