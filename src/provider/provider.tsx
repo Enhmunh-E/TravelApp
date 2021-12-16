@@ -1,5 +1,6 @@
-import {gql, useQuery} from '@apollo/client';
+import {gql, useLazyQuery, useQuery} from '@apollo/client';
 import React, {createContext, useMemo, useState} from 'react';
+import {ACTIVITY_PLACE_FIELDS} from '../fragments';
 type CategoryType = {
   name: string;
 };
@@ -19,35 +20,75 @@ const CATEGORIES = gql`
     }
   }
 `;
+type ActivityType = {
+  title: string;
+  rate: number;
+  category: {
+    name: string;
+  };
+  image: {
+    url: string;
+  };
+  sys: {
+    id: string;
+  };
+};
+const FILTERED_ACTIVITY = gql`
+  ${ACTIVITY_PLACE_FIELDS}
+  query FilteredAcivity($categoryName: String) {
+    activityCollection(where: {category: {name: $categoryName}}) {
+      items {
+        ...ActivityPlaceFields
+      }
+    }
+  }
+`;
+type ActivitiesType = {
+  activityCollection: {
+    items: ActivityType[];
+  };
+};
+
 type ContextType = {
   headerText: string;
   setHeaderText: React.Dispatch<React.SetStateAction<string>>;
   headerSelected: string;
+  filteredLoading: boolean;
+  filteredData: ActivitiesType;
   setHeaderSelected: React.Dispatch<React.SetStateAction<string>>;
   categoriesData: CategoryType[];
+  loadFilteredActivity: () => {};
 };
 export const Context = createContext<ContextType>({
   headerText: '',
   headerSelected: '',
   categoriesData: [],
+  filteredLoading: true,
+  filteredData: {},
   setHeaderText: () => {},
   setHeaderSelected: () => {},
+  loadFilteredActivity: () => {},
 });
 export const Provider = ({children}: any) => {
   const {data} = useQuery<CategoriesType | undefined>(CATEGORIES);
+  const [headerText, setHeaderText] = useState<string>('');
+  const [headerSelected, setHeaderSelected] = useState<string>('All');
   const categoriesData = useMemo(() => {
     return data ? [{name: 'All'}, ...data.categoryCollection.items] : [];
   }, [data]);
-  const [headerText, setHeaderText] = useState<string>('');
-  const [headerSelected, setHeaderSelected] = useState<string>('All');
+  const [loadFilteredActivity, {loading: filteredLoading, data: filteredData}] =
+    useLazyQuery<ActivitiesType>(FILTERED_ACTIVITY);
   return (
     <Context.Provider
       value={{
+        filteredData,
+        loadFilteredActivity,
         headerText,
         setHeaderText,
         headerSelected,
         setHeaderSelected,
         categoriesData,
+        filteredLoading,
       }}>
       {children}
     </Context.Provider>

@@ -1,7 +1,11 @@
-import {gql, useQuery} from '@apollo/client';
-import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {gql, useLazyQuery, useQuery} from '@apollo/client';
+import React, {useContext, useEffect, useMemo} from 'react';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import Footer from '../components/Footer';
 import HomeCarousel from '../components/HomeCarousel';
+import {ACTIVITY_PLACE_FIELDS} from '../fragments';
+import {Context} from '../provider/provider';
 import Colors from '../styles/colors';
 type ActivityType = {
   title: string;
@@ -23,31 +27,45 @@ type ActivitiesType = {
 };
 
 const ACTIVITY = gql`
+  ${ACTIVITY_PLACE_FIELDS}
   query {
     activityCollection {
       items {
-        title
-        rate
-        category {
-          name
-        }
-        image {
-          url
-        }
-        sys {
-          id
-        }
+        ...ActivityPlaceFields
+      }
+    }
+  }
+`;
+const FILTERED_ACTIVITY = gql`
+  ${ACTIVITY_PLACE_FIELDS}
+  query FilteredAcivity($categoryName: String) {
+    activityCollection(where: {category: {name: $categoryName}}) {
+      items {
+        ...ActivityPlaceFields
       }
     }
   }
 `;
 export const Home = () => {
-  const {error, data, loading} = useQuery<ActivitiesType>(ACTIVITY);
+  const {data, loading} = useQuery<ActivitiesType>(ACTIVITY);
+  const {headerSelected, filteredData} = useContext(Context);
   return (
     <View style={styles.container}>
       <Text style={styles.topActivities}>Top Activities</Text>
-      <HomeCarousel data={data ? data.activityCollection.items : []} />
+      <HomeCarousel
+        data={
+          headerSelected == 'All'
+            ? data?.activityCollection.items
+              ? data.activityCollection.items
+              : []
+            : filteredData
+            ? filteredData.activityCollection.items
+            : []
+        }
+        loading={loading}
+      />
       <Text style={styles.nearbyActivities}>Nearby activities</Text>
+      <Footer />
     </View>
   );
 };

@@ -6,8 +6,13 @@ import {Context} from '../provider/provider';
 import Colors from '../styles/colors';
 
 export const HomeHeader = () => {
-  const {headerText, headerSelected, setHeaderSelected, categoriesData} =
-    useContext(Context);
+  const {
+    headerText,
+    headerSelected,
+    setHeaderSelected,
+    categoriesData,
+    loadFilteredActivity,
+  } = useContext(Context);
   return (
     <View style={styles.headerContainer}>
       <View style={styles.row}>
@@ -28,7 +33,12 @@ export const HomeHeader = () => {
         showsHorizontalScrollIndicator={false}
         renderItem={({item}) => (
           <Pressable
-            onPress={() => setHeaderSelected(item.name)}
+            onPress={() => {
+              setHeaderSelected(item.name);
+              loadFilteredActivity({
+                variables: {categoryName: item.name},
+              });
+            }}
             style={[
               styles.headerItem,
               headerSelected == item.name && styles.selectedHeader,
@@ -48,7 +58,7 @@ export const HomeHeader = () => {
 };
 const styles = StyleSheet.create({
   headerContainer: {
-    height: 150,
+    height: 135,
     // display: 'flex',
     flexDirection: 'column',
     // justifyContent: 'space-between',

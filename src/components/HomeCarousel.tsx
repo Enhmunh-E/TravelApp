@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useContext, useMemo, useState} from 'react';
 import {
   FlatList,
   ImageBackground,
@@ -8,6 +8,7 @@ import {
   useWindowDimensions,
   View,
   Text,
+  ActivityIndicator,
 } from 'react-native';
 import {BlurView} from '@react-native-community/blur';
 import LinearGradient from 'react-native-linear-gradient';
@@ -15,6 +16,7 @@ import MapIcon from '../assets/treasure-map-line.svg';
 import Colors from '../styles/colors';
 import Star from '../assets/star-fill.svg';
 import Clock from '../assets/time-line.svg';
+import {Context} from '../provider/provider';
 
 type ActivityType = {
   title: string;
@@ -32,9 +34,9 @@ type ActivityType = {
 
 type Props = {
   data: ActivityType[];
+  loading: boolean;
 };
-export const HomeCarousel = ({data}: Props) => {
-  console.log(data);
+export const HomeCarousel = ({data, loading}: Props) => {
   const [imageIndex, setImageIndex] = useState(0);
   const {width} = useWindowDimensions();
   const onScroll = useCallback(
@@ -61,71 +63,81 @@ export const HomeCarousel = ({data}: Props) => {
         shadowRadius: 16.0,
         elevation: 24,
       }}>
-      <FlatList
-        data={data}
-        style={{
-          borderRadius: 5,
-        }}
-        keyExtractor={item => item.sys.id}
-        pagingEnabled={true}
-        horizontal={true}
-        onScroll={onScroll}
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-        renderItem={({item}) => (
-          <ImageBackground
-            // key={item.id}
-            source={{uri: item.image.url}}
-            resizeMode="cover"
-            style={{
-              height: ((width - 48) * 213) / 327,
-              width: width - 48,
-              borderRadius: 10,
-              padding: 16,
-            }}>
-            <LinearGradient
-              colors={['rgba(54, 54, 54, 0)', 'rgba(0, 0, 0, 0.8)']}
+      {loading ? (
+        <View
+          style={{
+            height: ((width - 48) * 213) / 327,
+            width: width - 48,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <ActivityIndicator size="small" />
+        </View>
+      ) : (
+        <FlatList
+          data={data}
+          style={{
+            borderRadius: 5,
+          }}
+          keyExtractor={item => item.sys.id}
+          pagingEnabled={true}
+          horizontal={true}
+          onScroll={onScroll}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          renderItem={({item}) => (
+            <ImageBackground
+              source={{uri: item.image.url}}
+              resizeMode="cover"
               style={{
-                position: 'absolute',
-                bottom: 0,
-                height: ((width - 48) * 213) / (327 * 2),
+                height: ((width - 48) * 213) / 327,
                 width: width - 48,
-              }}></LinearGradient>
-            <View style={[styles.col, styles.between, {flex: 1}]}>
-              <View style={[styles.row, styles.between]}>
-                <View style={[styles.itemNameContainer, styles.center]}>
-                  <MapIcon />
-                  <Text style={{color: '#D27C4A', paddingLeft: 2}}>
-                    centraal
-                  </Text>
-                </View>
-                <View style={styles.col}>
-                  <BlurView
-                    blurType="ultraThinMaterialDark"
-                    blurAmount={4}
-                    style={[styles.row, styles.center, styles.starContainer]}>
-                    <Star />
-                    <Text style={{color: Colors.primary, paddingLeft: 4}}>
-                      {item.rate}
-                    </Text>
-                  </BlurView>
-                  <View style={[styles.closestContainer, styles.center]}>
-                    <Clock />
-                    <Text style={{color: Colors.primary, fontSize: 12}}>
-                      Closest
-                    </Text>
-                    <Text style={{color: Colors.primary, fontSize: 12}}>
-                      7.35pm
+                borderRadius: 10,
+                padding: 16,
+              }}>
+              <LinearGradient
+                colors={['rgba(54, 54, 54, 0)', 'rgba(0, 0, 0, 0.8)']}
+                style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  height: ((width - 48) * 213) / (327 * 2),
+                  width: width - 48,
+                }}></LinearGradient>
+              <View style={[styles.col, styles.between, {flex: 1}]}>
+                <View style={[styles.row, styles.between]}>
+                  <View style={[styles.itemNameContainer, styles.center]}>
+                    <MapIcon />
+                    <Text style={{color: '#D27C4A', paddingLeft: 2}}>
+                      centraal
                     </Text>
                   </View>
+                  <View style={styles.col}>
+                    <BlurView
+                      blurType="ultraThinMaterialDark"
+                      blurAmount={4}
+                      style={[styles.row, styles.center, styles.starContainer]}>
+                      <Star />
+                      <Text style={{color: Colors.primary, paddingLeft: 4}}>
+                        {item.rate}
+                      </Text>
+                    </BlurView>
+                    <View style={[styles.closestContainer, styles.center]}>
+                      <Clock />
+                      <Text style={{color: Colors.primary, fontSize: 12}}>
+                        Closest
+                      </Text>
+                      <Text style={{color: Colors.primary, fontSize: 12}}>
+                        7.35pm
+                      </Text>
+                    </View>
+                  </View>
                 </View>
+                <Text style={styles.about}>{item.title}</Text>
               </View>
-              <Text style={styles.about}>{item.title}</Text>
-            </View>
-          </ImageBackground>
-        )}
-      />
-
+            </ImageBackground>
+          )}
+        />
+      )}
       <View
         style={{
           position: 'absolute',
@@ -134,11 +146,11 @@ export const HomeCarousel = ({data}: Props) => {
           display: 'flex',
           flexDirection: 'row',
         }}>
-        {data.map((dt, index) => (
+        {data?.map((dt, index) => (
           <View
             key={index}
             style={{
-              opacity: 1 - (1 / data.length) * Math.abs(imageIndex - index),
+              opacity: 1 - (0.8 / data.length) * Math.abs(imageIndex - index),
               width: imageIndex == index ? 25 : 6,
               height: 6,
               backgroundColor: 'white',
@@ -192,61 +204,3 @@ const styles = StyleSheet.create({
   },
 });
 export default HomeCarousel;
-// const data1 = [
-//   {
-//     id: '1',
-//     name: 'centraal',
-//     about: 'Taking a boat tour through Canals',
-//     star: 4.1,
-//     closest: '7.35pm',
-//     image: require('../assets/centraal.png'),
-//   },
-//   {
-//     id: '2',
-//     name: 'centraal',
-//     about: 'Taking a boat tour through Canals',
-//     star: 4.1,
-//     closest: '7.35pm',
-//     image: require('../assets/centraal.png'),
-//   },
-//   {
-//     id: '3',
-//     name: 'centraal',
-//     about: 'Taking a boat tour through Canals',
-//     star: 4.1,
-//     closest: '7.35pm',
-//     image: require('../assets/centraal.png'),
-//   },
-//   {
-//     id: '4',
-//     name: 'centraal',
-//     about: 'Taking a boat tour through Canals',
-//     star: 4.1,
-//     closest: '7.35pm',
-//     image: require('../assets/centraal.png'),
-//   },
-//   {
-//     id: '5',
-//     name: 'centraal',
-//     about: 'Taking a boat tour through Canals',
-//     star: 4.1,
-//     closest: '7.35pm',
-//     image: require('../assets/centraal.png'),
-//   },
-//   {
-//     id: '6',
-//     name: 'centraal',
-//     about: 'Taking a boat tour through Canals',
-//     star: 4.1,
-//     closest: '7.35pm',
-//     image: require('../assets/centraal.png'),
-//   },
-//   {
-//     id: '7',
-//     name: 'centraal',
-//     about: 'Taking a boat tour through Canals',
-//     star: 4.1,
-//     closest: '7.35pm',
-//     image: require('../assets/centraal.png'),
-//   },
-// ];
