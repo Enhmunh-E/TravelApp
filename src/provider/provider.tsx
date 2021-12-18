@@ -1,4 +1,4 @@
-import {gql, useLazyQuery, useQuery} from '@apollo/client';
+import {gql, OperationVariables, useLazyQuery, useQuery} from '@apollo/client';
 import React, {createContext, useMemo, useState} from 'react';
 import {ACTIVITY_PLACE_FIELDS} from '../fragments';
 type CategoryType = {
@@ -54,17 +54,21 @@ type ContextType = {
   setHeaderText: React.Dispatch<React.SetStateAction<string>>;
   headerSelected: string;
   filteredLoading: boolean;
-  filteredData: ActivitiesType;
+  filteredData: ActivitiesType | undefined;
   setHeaderSelected: React.Dispatch<React.SetStateAction<string>>;
   categoriesData: CategoryType[];
-  loadFilteredActivity: () => {};
+  loadFilteredActivity: () => void;
 };
 export const Context = createContext<ContextType>({
   headerText: '',
   headerSelected: '',
   categoriesData: [],
   filteredLoading: true,
-  filteredData: {},
+  filteredData: {
+    activityCollection: {
+      items: [],
+    },
+  },
   setHeaderText: () => {},
   setHeaderSelected: () => {},
   loadFilteredActivity: () => {},
@@ -77,7 +81,9 @@ export const Provider = ({children}: any) => {
     return data ? [{name: 'All'}, ...data.categoryCollection.items] : [];
   }, [data]);
   const [loadFilteredActivity, {loading: filteredLoading, data: filteredData}] =
-    useLazyQuery<ActivitiesType>(FILTERED_ACTIVITY);
+    useLazyQuery<ActivitiesType>(FILTERED_ACTIVITY, {
+      variables: {categoryName: headerSelected},
+    });
   return (
     <Context.Provider
       value={{

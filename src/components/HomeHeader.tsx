@@ -35,9 +35,7 @@ export const HomeHeader = () => {
           <Pressable
             onPress={() => {
               setHeaderSelected(item.name);
-              loadFilteredActivity({
-                variables: {categoryName: item.name},
-              });
+              loadFilteredActivity();
             }}
             style={[
               styles.headerItem,
@@ -56,6 +54,7 @@ export const HomeHeader = () => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   headerContainer: {
     height: 135,

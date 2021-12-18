@@ -13,5 +13,9 @@ export const ACTIVITY_PLACE_FIELDS = gql`
     sys {
       id
     }
+    location {
+      lat
+      lon
+    }
   }
 `;

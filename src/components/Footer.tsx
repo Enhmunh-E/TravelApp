@@ -60,65 +60,65 @@ export const Footer = () => {
         },
       ]}>
       <Pressable
-        onPress={AnimationStarter}
-        style={[
-          // eslint-disable-next-line react-native/no-inline-styles
-          {flex: 1, position: 'absolute', display: opened ? 'none' : 'flex'},
-          styles.center,
-        ]}>
-        <Animated.View style={{opacity: hamburgerOpacity}}>
+        onPress={() => !opened && AnimationStarter()}
+        style={[styles.hambugerBtn, styles.center]}>
+        <Animated.View
+          style={{
+            opacity: hamburgerOpacity,
+            display: opened ? 'none' : 'flex',
+          }}>
           <Hamburger />
         </Animated.View>
+        <Animated.View
+          style={[
+            // eslint-disable-next-line react-native/no-inline-styles
+            {
+              height: 160,
+              width: width - 32,
+              borderRadius: 36,
+              display: opened ? 'flex' : 'none',
+            },
+          ]}>
+          <View style={styles.top}>
+            <View style={[styles.col, styles.topItemContainer, styles.center]}>
+              <Discover />
+              <Text style={styles.topItemText}>DISCOVER</Text>
+            </View>
+            <View style={[styles.col, styles.topItemContainer, styles.center]}>
+              <Dos />
+              <Text style={styles.topItemText}>Do's</Text>
+            </View>
+            <View style={[styles.col, styles.topItemContainer, styles.center]}>
+              <Dones />
+              <Text style={styles.topItemText}>Done's</Text>
+            </View>
+            <View
+              style={[
+                styles.col,
+                styles.topItemContainer,
+                styles.center,
+                {backgroundColor: '#232323'},
+              ]}>
+              <Image
+                source={require('../assets/profile.jpg')}
+                style={styles.profileImage}
+              />
+              <Text style={styles.topItemText}>Profile</Text>
+            </View>
+          </View>
+          <View style={styles.bottom}>
+            <View style={[styles.pinContainer, styles.center]}>
+              <Pin />
+              <Text style={styles.pinText}>Change Cıty</Text>
+            </View>
+            <Pressable
+              onPress={AnimationStarter}
+              style={[styles.center, styles.grow]}>
+              <Close />
+            </Pressable>
+          </View>
+        </Animated.View>
       </Pressable>
-      <Animated.View
-        style={[
-          // eslint-disable-next-line react-native/no-inline-styles
-          {
-            height: 160,
-            width: width - 32,
-            borderRadius: 36,
-            display: opened ? 'flex' : 'none',
-          },
-        ]}>
-        <View style={styles.top}>
-          <View style={[styles.col, styles.topItemContainer, styles.center]}>
-            <Discover />
-            <Text style={styles.topItemText}>DISCOVER</Text>
-          </View>
-          <View style={[styles.col, styles.topItemContainer, styles.center]}>
-            <Dos />
-            <Text style={styles.topItemText}>Do's</Text>
-          </View>
-          <View style={[styles.col, styles.topItemContainer, styles.center]}>
-            <Dones />
-            <Text style={styles.topItemText}>Done's</Text>
-          </View>
-          <View
-            style={[
-              styles.col,
-              styles.topItemContainer,
-              styles.center,
-              {backgroundColor: '#232323'},
-            ]}>
-            <Image
-              source={require('../assets/profile.jpg')}
-              style={styles.profileImage}
-            />
-            <Text style={styles.topItemText}>Profile</Text>
-          </View>
-        </View>
-        <View style={styles.bottom}>
-          <View style={[styles.pinContainer, styles.center]}>
-            <Pin />
-            <Text style={styles.pinText}>Change Cıty</Text>
-          </View>
-          <Pressable
-            onPress={AnimationStarter}
-            style={[styles.center, styles.grow]}>
-            <Close />
-          </Pressable>
-        </View>
-      </Animated.View>
     </Animated.View>
   );
 };
@@ -187,6 +187,13 @@ const styles = StyleSheet.create({
   },
   grow: {
     flex: 1,
+  },
+  hambugerBtn: {
+    flex: 1,
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    position: 'absolute',
   },
 });
 export default Footer;
