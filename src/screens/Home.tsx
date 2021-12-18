@@ -9,6 +9,7 @@ import {check, PERMISSIONS, RESULTS, request} from 'react-native-permissions';
 import Geolocation from 'react-native-geolocation-service';
 import Colors from '../styles/colors';
 import NearbyItem from '../components/NearbyItem';
+import LinearGradient from 'react-native-linear-gradient';
 type ActivityType = {
   title: string;
   rate: number;
@@ -101,6 +102,9 @@ export const Home = () => {
         ))}
       </ScrollView>
       <Footer />
+      gradient(360deg, #FFFFFF 0%, rgba(255, 255, 255, 0.783389) 53.2%,
+      rgba(255, 255, 255, 0.341442) 85.16%, rgba(255, 255, 255, 0) 100%);
+      <LinearGradient colors={['rgba(54, 54, 54, 0)', 'rgba(0, 0, 0, 0.8)']} />
     </View>
   );
 };
