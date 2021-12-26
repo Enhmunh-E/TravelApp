@@ -1,23 +1,18 @@
 import React, {useCallback, useState} from 'react';
 import {
   FlatList,
-  ImageBackground,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   NativeScrollEvent,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   NativeSyntheticEvent,
   StyleSheet,
   View,
-  Text,
   ActivityIndicator,
 } from 'react-native';
 // import {BlurView} from '@react-native-community/blur';
-import LinearGradient from 'react-native-linear-gradient';
-import MapIcon from '../assets/treasure-map-line.svg';
 import Colors from '../styles/colors';
-import Star from '../assets/star-fill.svg';
-import Clock from '../assets/time-line.svg';
 import {Dimensions} from 'react-native';
+import CarouselItem from './CarouselItem';
 
 type ActivityType = {
   title: string;
@@ -66,37 +61,9 @@ export const HomeCarousel = ({data, loading}: Props) => {
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           renderItem={({item}) => (
-            <ImageBackground
-              source={{uri: item.image.url}}
-              resizeMode="cover"
-              style={styles.imageBackground}>
-              <LinearGradient
-                colors={['rgba(54, 54, 54, 0)', 'rgba(0, 0, 0, 0.8)']}
-                style={styles.linearStyle}
-              />
-              <View style={[styles.col, styles.between, styles.cover]}>
-                <View style={[styles.row, styles.between]}>
-                  <View style={[styles.itemNameContainer, styles.center]}>
-                    <MapIcon />
-                    <Text style={styles.centraal}>centraal</Text>
-                  </View>
-                  <View style={styles.col}>
-                    <View>
-                      {/* // blurType="ultraThinMaterialDark" // blurAmount={4} */}
-                      {/* style={[styles.row, styles.center, styles.starContainer]}> */}
-                      <Star />
-                      <Text style={styles.rate}>{item.rate}</Text>
-                    </View>
-                    <View style={[styles.closestContainer, styles.center]}>
-                      <Clock />
-                      <Text style={styles.closestText}>Closest</Text>
-                      <Text style={styles.closestText}>7.35pm</Text>
-                    </View>
-                  </View>
-                </View>
-                <Text style={styles.about}>{item.title}</Text>
-              </View>
-            </ImageBackground>
+            <View testID="carouselItemId">
+              <CarouselItem item={item} />
+            </View>
           )}
         />
       )}
@@ -104,6 +71,7 @@ export const HomeCarousel = ({data, loading}: Props) => {
         {data?.map((dt, index) => (
           <View
             key={index}
+            testID="dotsId"
             style={[
               // eslint-disable-next-line react-native/no-inline-styles
               {

@@ -31,9 +31,7 @@ export const NearbyItem = ({data}: Props) => {
   return (
     <View style={styles.itemContainer}>
       <View style={styles.bgContainer}>
-        <ImageBackground
-          source={{uri: data.image.url}}
-          style={styles.bg}></ImageBackground>
+        <ImageBackground source={{uri: data.image.url}} style={styles.bg} />
       </View>
       <Text style={styles.title}>{data.title}</Text>
       <View style={[styles.row, styles.alignCenter]}>

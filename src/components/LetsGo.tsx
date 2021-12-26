@@ -1,6 +1,6 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import styled from 'styled-components';
+import {StyleSheet, View} from 'react-native';
+import styled from 'styled-components/native';
 import Colors from '../styles/colors';
 type LineProps = {
   color: string;
@@ -30,14 +30,17 @@ export const LetsGo = (props: LetsGoPropsType) => {
       <LetsGoText>LET'S GO!</LetsGoText>
       <View style={styles.row}>
         <Line
+          testID="line"
           width={'213px'}
           color={props.isdark ? Colors.grey : Colors.primary}
         />
         <Line
+          testID="line"
           width={'44px'}
           color={props.isdark ? Colors.grey : Colors.primary}
         />
         <Line
+          testID="line"
           width={'25px'}
           color={props.isdark ? Colors.grey : Colors.primary}
         />

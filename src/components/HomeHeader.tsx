@@ -12,7 +12,6 @@ export const HomeHeader = () => {
     categoriesData,
     loadFilteredActivity,
   } = useContext(Context);
-  console.log(categoriesData);
   return (
     <View style={styles.headerContainer}>
       <View style={styles.row}>
@@ -27,7 +26,6 @@ export const HomeHeader = () => {
       <FlatList
         data={categoriesData}
         keyExtractor={item => item.name}
-        pagingEnabled={true}
         horizontal={true}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}

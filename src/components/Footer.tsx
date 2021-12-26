@@ -47,6 +47,29 @@ export const Footer = () => {
     }
     setOpened(!opened);
   };
+  const elems = [
+    {
+      text: 'Discover',
+      image: () => <Discover />,
+    },
+    {
+      text: "Do's",
+      image: () => <Dos />,
+    },
+    {
+      text: "Done's",
+      image: () => <Dones />,
+    },
+    {
+      text: 'Profile',
+      image: () => (
+        <Image
+          source={require('../assets/profile.jpg')}
+          style={styles.profileImage}
+        />
+      ),
+    },
+  ];
   return (
     <Animated.View
       style={[
@@ -63,6 +86,7 @@ export const Footer = () => {
         onPress={() => !opened && AnimationStarter()}
         style={[styles.hambugerBtn, styles.center]}>
         <Animated.View
+          // eslint-disable-next-line react-native/no-inline-styles
           style={{
             opacity: hamburgerOpacity,
             display: opened ? 'none' : 'flex',
@@ -80,31 +104,14 @@ export const Footer = () => {
             },
           ]}>
           <View style={styles.top}>
-            <View style={[styles.col, styles.topItemContainer, styles.center]}>
-              <Discover />
-              <Text style={styles.topItemText}>DISCOVER</Text>
-            </View>
-            <View style={[styles.col, styles.topItemContainer, styles.center]}>
-              <Dos />
-              <Text style={styles.topItemText}>Do's</Text>
-            </View>
-            <View style={[styles.col, styles.topItemContainer, styles.center]}>
-              <Dones />
-              <Text style={styles.topItemText}>Done's</Text>
-            </View>
-            <View
-              style={[
-                styles.col,
-                styles.topItemContainer,
-                styles.center,
-                {backgroundColor: '#232323'},
-              ]}>
-              <Image
-                source={require('../assets/profile.jpg')}
-                style={styles.profileImage}
-              />
-              <Text style={styles.topItemText}>Profile</Text>
-            </View>
+            {elems.map((el, index) => (
+              <View
+                key={index}
+                style={[styles.col, styles.topItemContainer, styles.center]}>
+                {el.image}
+                <Text style={styles.topItemText}>{el.text}</Text>
+              </View>
+            ))}
           </View>
           <View style={styles.bottom}>
             <View style={[styles.pinContainer, styles.center]}>
@@ -194,6 +201,9 @@ const styles = StyleSheet.create({
     height: 72,
     borderRadius: 36,
     position: 'absolute',
+  },
+  selected: {
+    backgroundColor: '#232323',
   },
 });
 export default Footer;

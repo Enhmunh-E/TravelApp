@@ -1,4 +1,3 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
 import {
   StyleSheet,
@@ -7,13 +6,14 @@ import {
   Dimensions,
   Text,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import Explore from '../assets/explore.svg';
-import LetsGo from '../components/LetsGo';
 import Colors from '../styles/colors';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {RootStackParamList} from './types';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+
 const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
 type Props = NativeStackScreenProps<RootStackParamList, 'Welcome'>;
 export const Welcome = ({navigation}: Props) => {
   return (

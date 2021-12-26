@@ -1,11 +1,11 @@
 import {gql, useQuery} from '@apollo/client';
 import React, {useContext, useEffect, useMemo, useState} from 'react';
-import {FlatList, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import Footer from '../components/Footer';
 import HomeCarousel from '../components/HomeCarousel';
 import {ACTIVITY_PLACE_FIELDS} from '../fragments';
 import {Context} from '../provider/provider';
-import {check, PERMISSIONS, RESULTS, request} from 'react-native-permissions';
+import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import Geolocation from 'react-native-geolocation-service';
 import Colors from '../styles/colors';
 import NearbyItem from '../components/NearbyItem';
@@ -47,26 +47,50 @@ const ACTIVITY = gql`
   }
 `;
 request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then(result => {
+  switch (result) {
+    case RESULTS.UNAVAILABLE:
+      console.log(
+        'This feature is not available (on this device / in this context)',
+      );
+      break;
+    case RESULTS.DENIED:
+      console.log(
+        'The permission has not been requested / is denied but requestable',
+      );
+      break;
+    case RESULTS.LIMITED:
+      console.log('The permission is limited: some actions are possible');
+      break;
+    case RESULTS.GRANTED:
+      console.log('The permission is granted');
+      break;
+    case RESULTS.BLOCKED:
+      console.log('The permission is denied and not requestable anymore');
+      break;
+  }
+});
 export const Home = () => {
   const {data, loading} = useQuery<ActivitiesType>(ACTIVITY);
   const [location, setLocation] = useState<LocationType | null>(null);
   const {headerSelected, filteredData} = useContext(Context);
   const nearbyPlaces = useMemo(() => {
-    return data?.activityCollection.items.filter(
-      data =>
-        Number(data.location.lat.toFixed(3)) == location?.lat &&
-        Number(data.location.lon.toFixed(3)) == location.lon,
-    );
+    return data?.activityCollection.items.filter(dt => {
+      return (
+        Number(dt.location.lat.toFixed(1)) === location?.lat &&
+        Number(dt.location.lon.toFixed(1)) === location?.lon
+      );
+    });
   }, [data, location]);
-
   useEffect(() => {
     let watchID = 0;
     const subscribeLocationLocation = () => {
       watchID = Geolocation.watchPosition(
         position => {
           setLocation({
-            lat: Number(position.coords.latitude.toFixed(3)),
-            lon: Number(position.coords.longitude.toFixed(3)),
+            lat: Number(position.coords.latitude.toFixed(1)),
+            lon: Number(position.coords.longitude.toFixed(1)),
           });
         },
         error => {
@@ -102,8 +126,8 @@ export const Home = () => {
         ))}
       </ScrollView>
       <Footer />
-      gradient(360deg, #FFFFFF 0%, rgba(255, 255, 255, 0.783389) 53.2%,
-      rgba(255, 255, 255, 0.341442) 85.16%, rgba(255, 255, 255, 0) 100%);
+      {/* gradient(360deg, #FFFFFF 0%, rgba(255, 255, 255, 0.783389) 53.2%,
+      rgba(255, 255, 255, 0.341442) 85.16%, rgba(255, 255, 255, 0) 100%); */}
       <LinearGradient colors={['rgba(54, 54, 54, 0)', 'rgba(0, 0, 0, 0.8)']} />
     </View>
   );
